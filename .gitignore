@@ -1,0 +1,16 @@
+*.iml
+.gradle
+/gradle
+/.idea
+/.idea/codeStyles
+/.idea/.name
+/.idea/gradle.xml
+/.idea/jarRepositories.xml
+/.idea/markdown-navigator-enh.xml
+/.idea/markdown-navigator.xml
+/local.properties
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx

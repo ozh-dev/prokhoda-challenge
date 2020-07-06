@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.FloatRange
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.ozh.map.controller.ControllerShop
@@ -31,6 +33,14 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
         }
 
+        btmListBehavior = BottomSheetBehavior.from(list_rv)
+        btmListBehavior.isHideable = true
+
+        btmListBehavior.onSlide { _, slideOffset ->
+//            map_overlay_layout.ratio = 1 - calculateOffsetRatio(slideOffset)
+            map_overlay_layout.slideOffset = slideOffset
+        }
+
         ItemList.create()
             .apply {
                 repeat(10) {
@@ -39,28 +49,14 @@ class MainActivity : AppCompatActivity() {
             }
             .also(adapter::setItems)
 
-        btmListBehavior = BottomSheetBehavior.from(list_rv)
-        btmListBehavior.isHideable = true
-        btmListBehavior.isFitToContents = false
-
-        btmListBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-
-                val wholeOffset = calculateOffsetRatio(slideOffset)
-                Log.d("TAG", "Offset: $slideOffset")
-                Log.d("TAG", "Offset: $wholeOffset")
-            }
-
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-
-            }
-
-        })
+        open_btn.setOnClickListener {
+            btmListBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
 
     }
 
     //((input - min) * 100) / (max - min)
-    fun calculateOffsetRatio(slideOffset: Float): Float {
+    private fun calculateOffsetRatio(@FloatRange(from = -1.0, to = 1.0) slideOffset: Float): Float {
         val offsetMin = -1
         val offsetMax = 1
         val result = ((slideOffset - offsetMin) * 100) / (offsetMax - offsetMin)

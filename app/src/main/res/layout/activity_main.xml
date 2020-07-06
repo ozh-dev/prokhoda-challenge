@@ -8,11 +8,34 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/map_pic" />
+
+    <ru.ozh.map.overlay.MapOverlay
+        android:id="@+id/map_overlay_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:overlay_color="@color/swatch_1">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/open_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:fabSize="normal"
+            android:elevation="4dp"
+            android:tag="@string/overlay_btn_tag"
+            app:srcCompat="@drawable/ic_baseline_map_24" />
+
+    </ru.ozh.map.overlay.MapOverlay>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_rv"
-        app:layout_behavior="@string/bottom_sheet_behavior"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:layout_height="match_parent" />
+        app:layout_behavior="@string/bottom_sheet_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

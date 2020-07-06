@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Prokhoda challenge</string>
+    <string name="overlay_btn_tag">btn_tag</string>
 </resources>

@@ -3,4 +3,11 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <color name = "swatch_1">#ededed</color>
+    <color name = "swatch_2">#313231</color>
+    <color name = "swatch_3">#73896f</color>
+    <color name = "swatch_4">#a5a5a5</color>
+    <color name = "swatch_5">#1bdd91</color>
+    <color name = "swatch_6">#daa396</color>
 </resources>

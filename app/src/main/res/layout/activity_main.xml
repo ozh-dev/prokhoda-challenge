@@ -13,23 +13,20 @@
         android:layout_height="match_parent"
         android:background="@drawable/map_pic" />
 
-    <ru.ozh.map.overlay.MapOverlay
+    <ru.ozh.map.view.overlay.CircleMapOverlay
         android:id="@+id/map_overlay_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:overlay_color="@color/swatch_1">
+        app:overlay_color="@color/swatch_1"
+        app:overlay_clap_x="44dp"
+        app:overlay_clap_y="44dp" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/open_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:fabSize="normal"
-            android:elevation="4dp"
-            android:tag="@string/overlay_btn_tag"
-            app:srcCompat="@drawable/ic_baseline_map_24" />
-
-    </ru.ozh.map.overlay.MapOverlay>
+    <ru.ozh.map.view.CircleButton
+        android:id="@+id/open_btn"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:tag="@string/overlay_btn_tag" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_rv"

@@ -1,4 +1,4 @@
-package ru.ozh.map
+package ru.ozh.map.ktx
 
 import android.view.View
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -17,13 +17,17 @@ class BottomSheetCallBack(
 }
 
 fun BottomSheetBehavior<out View>.onSlide(onSlideCallback: ((bottomSheet: View, slideOffset: Float) -> Unit)) {
-    this.addBottomSheetCallback(BottomSheetCallBack(
-        onSlide = onSlideCallback
-    ))
+    this.addBottomSheetCallback(
+        BottomSheetCallBack(
+            onSlide = onSlideCallback
+        )
+    )
 }
 
 fun BottomSheetBehavior<out View>.onStateChanged(onStateChanged: (bottomSheet: View, newState: Int) -> Unit) {
-    this.addBottomSheetCallback(BottomSheetCallBack(
-        onStateChanged = onStateChanged
-    ))
+    this.addBottomSheetCallback(
+        BottomSheetCallBack(
+            onStateChanged = onStateChanged
+        )
+    )
 }

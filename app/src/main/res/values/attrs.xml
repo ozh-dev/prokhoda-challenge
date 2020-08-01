@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="CircleMapOverlay">
+
+    <declare-styleable name="MapCircleOverlay">
         <attr name="overlay_color" format="color" />
         <attr name="overlay_clap_x" format="dimension" />
         <attr name="overlay_clap_y" format="dimension" />
     </declare-styleable>
+
 </resources>

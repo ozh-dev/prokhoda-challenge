@@ -5,7 +5,23 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="colorControlNormal">@android:color/black</item>
+    </style>
+
+    <style name="Text.Medium" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/sans_medium</item>
+    </style>
+
+    <style name="Text.Regular" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/sans_regular</item>
+    </style>
+
+    <style name="Text.Regular.12">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Text.Medium.16">
+        <item name="android:textSize">16sp</item>
     </style>
 
 </resources>

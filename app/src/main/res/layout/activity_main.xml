@@ -5,28 +5,21 @@
     android:id="@+id/list_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-    <FrameLayout
+    <fragment
+        android:id="@+id/map_view"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/map_pic" />
+        android:layout_height="match_parent" />
 
-    <ru.ozh.map.view.overlay.CircleMapOverlay
+    <ru.ozh.map.view.overlay.MapCircleOverlay
         android:id="@+id/map_overlay_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:overlay_color="@color/swatch_1"
         app:overlay_clap_x="44dp"
-        app:overlay_clap_y="44dp" />
-
-    <ru.ozh.map.view.CircleButton
-        android:id="@+id/open_btn"
-        android:layout_width="56dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:tag="@string/overlay_btn_tag" />
+        app:overlay_clap_y="44dp"
+        app:overlay_color="@color/swatch_1" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_rv"
@@ -34,5 +27,11 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         app:layout_behavior="@string/bottom_sheet_behavior" />
+
+    <ru.ozh.map.view.button.CircleButton
+        android:id="@+id/map_btn"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

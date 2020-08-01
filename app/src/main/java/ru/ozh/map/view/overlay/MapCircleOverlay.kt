@@ -8,7 +8,9 @@ import android.view.animation.AccelerateInterpolator
 import androidx.core.content.withStyledAttributes
 import androidx.core.graphics.component1
 import androidx.core.graphics.component2
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import ru.ozh.map.Place
 import ru.ozh.map.`object`.Circle
 import ru.ozh.map.ktx.CircleKtx.draw
 import ru.ozh.map.ktx.CircleKtx.isBelong
@@ -20,12 +22,15 @@ import ru.ozh.map.R
 import ru.ozh.map.ktx.px
 import ru.ozh.map.view.base.MapOverlayLayout
 
-class CircleMapOverlay @JvmOverloads constructor(
+/**
+ * Draw pins and circle above map
+ */
+class MapCircleOverlay @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : MapOverlayLayout<PinView>(context, attrs) {
 
-    var slideOffset = 0f
+    var slideOffset = 1f
         set(value) {
             field = value
             calculateCirclePosition()
@@ -38,10 +43,8 @@ class CircleMapOverlay @JvmOverloads constructor(
     private var horizontalOffset = 0f
     private val accelerateInterpolator = AccelerateInterpolator(1.2f)
 
-    private val originalCircle: Circle =
-        Circle()
-    private var tempCircle: Circle =
-        Circle()
+    private val originalCircle: Circle = Circle()
+    private var tempCircle: Circle = Circle()
 
     private val circlePaint = Paint()
         .apply {
@@ -58,62 +61,15 @@ class CircleMapOverlay @JvmOverloads constructor(
         setWillNotDraw(false)
         setLayerType(View.LAYER_TYPE_SOFTWARE, null)
 
-        context.withStyledAttributes(attrs, R.styleable.CircleMapOverlay) {
-            val overLayColor = getColor(R.styleable.CircleMapOverlay_overlay_color, Color.BLACK)
-            val clapX = getDimensionPixelOffset(R.styleable.CircleMapOverlay_overlay_clap_x, 0)
-            val clapY = getDimensionPixelOffset(R.styleable.CircleMapOverlay_overlay_clap_y, 0)
+        context.withStyledAttributes(attrs, R.styleable.MapCircleOverlay) {
+            val overLayColor = getColor(R.styleable.MapCircleOverlay_overlay_color, Color.BLACK)
+            val clapX = getDimensionPixelOffset(R.styleable.MapCircleOverlay_overlay_clap_x, 0)
+            val clapY = getDimensionPixelOffset(R.styleable.MapCircleOverlay_overlay_clap_y, 0)
 
             overlayPaint.color = overLayColor
             originalCircle.set(clapX.toFloat(), clapY.toFloat())
         }
     }
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-
-        val points = arrayOf(
-            Point(300, 300),
-            Point(400, 400),
-            Point(500, 500),
-            Point(600, 600)
-        )
-
-        for (point in points) {
-            addMarker(buildPinView(point))
-        }
-    }
-
-    private fun buildPinView(point: Point): PinView {
-        return PinView(context, LatLng(.0, .0), point, R.drawable.ic_pin)
-            .apply {
-                layoutParams = LayoutParams(40.px, 40.px)
-            }
-    }
-
-    /*override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        canvas.drawPaint(overlayPaint)
-        val (cX, cY) = anchorViewPoint
-        if (slideOffset in 0f..1f) {
-            val horizontalOffsetRatio = 1 - calculateProgressRatio(slideOffset, 0f, 1f)
-            val horizontalOffsetAcceleratedRatio =
-                accelerateInterpolator.getInterpolation(horizontalOffsetRatio)
-            val horizontalOffsetDistance = ((width / 2f) - cX)
-            horizontalOffset = horizontalOffsetDistance * horizontalOffsetAcceleratedRatio
-        }
-
-        val radiusRatio = 1 - calculateProgressRatio(slideOffset, -1f, 1f)
-        val circleBoardY = height * radiusRatio
-
-        if (circleBoardY < anchorViewPoint.y) {
-            return
-        }
-
-        circleBoardPoint.set(cX, circleBoardY)
-        val radius = calculateDistance(anchorViewPoint, circleBoardPoint) * 1.1f
-
-        canvas.drawCircle(cX + horizontalOffset, cY, radius, holePaint)
-    }*/
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -124,13 +80,35 @@ class CircleMapOverlay @JvmOverloads constructor(
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         calculateCirclePosition()
-        invalidatePins()
+    }
+
+    fun setPlaces(places: List<Place>, map: GoogleMap) {
+        places.forEach { place ->
+            addMarker(
+                buildPinView(
+                    place.placeLatLng,
+                    map.projection.toScreenLocation(place.placeLatLng),
+                    place.isOpen
+                )
+            )
+        }
+    }
+
+    private fun buildPinView(latLng: LatLng, point: Point, isEnable: Boolean): PinView {
+        return PinView(
+            context,
+            latLng,
+            point,
+            R.drawable.ic_pin,
+            context.getColor(if (isEnable) R.color.swatch_5 else R.color.red)
+        )
+            .apply { layoutParams = LayoutParams(40.px, 40.px) }
     }
 
     private fun calculateCirclePosition() {
         val (x, y) = originalCircle.getCenter()
 
-        //calculate circle x position
+        //calculate circle x offset position
         if (halfOffsetRange.contains(slideOffset)) {
             val horizontalOffsetRatio = 1 - halfOffsetRange.progressRatio(slideOffset)
             val horizontalOffsetAcceleratedRatio =
@@ -141,20 +119,22 @@ class CircleMapOverlay @JvmOverloads constructor(
 
         //calculate circle radius
         val slideOffsetRatio = 1 - wholeOffsetRange.progressRatio(slideOffset)
-        val radius = ((height * slideOffsetRatio) - y) * 1.1f
+        val radius = ((height * slideOffsetRatio) - y) * 1.15f
 
+        //draw circle
         tempCircle =
             originalCircle
                 .setRadius(radius)
                 .offset(dx = horizontalOffset)
     }
 
+    //draw pins that belongs to tempCircleRadius
     private fun invalidatePins() {
         markersList.forEach { pinView ->
-            if (!tempCircle.isBelong(pinView.point, radiusRatio = 0.7f)) {
-                pinView.hide()
-            } else {
+            if (tempCircle.isBelong(pinView.point, radiusRatio = 0.7f)) {
                 pinView.show()
+            } else {
+                pinView.hide()
             }
         }
     }

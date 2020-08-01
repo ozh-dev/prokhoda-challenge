@@ -1,16 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:background="@android:color/white">
+    android:background="@drawable/bg_card_shape"
+    android:padding="16dp">
 
     <TextView
+        android:id="@+id/place_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:textAppearance="@style/Text.Medium.16"
         android:textColor="@android:color/black"
-        android:text="Shop Item"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+        tools:text="Media Markt" />
+
+    <TextView
+        android:id="@+id/place_address_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/place_name_tv"
+        android:layout_marginTop="6dp"
+        android:textAppearance="@style/Text.Regular.12"
+        android:textColor="@android:color/black"
+        tools:text="Sierra Gamon, 134" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/place_address_tv"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/place_open_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_clock"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/Text.Regular.12"
+            android:textColor="@android:color/black"
+            tools:text="9:00 - 21:00" />
+
+        <TextView
+            android:id="@+id/place_status_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="@style/Text.Regular.12"
+            android:textColor="@color/selector_open_state"
+            tools:text="Open" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/place_favorite_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/bg_favorite_selector" />
+
 </RelativeLayout>
